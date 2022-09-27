@@ -27,11 +27,6 @@ jobs:
                 --url http://localhost:8000/test \
                 --header 'content-type: application/json' \
                 --data '{"msg": "testing"}'
-                sleep 10
-                docker container stop node-docker:$IMAGE_TAG
-                docker container rm -f node-docker:$IMAGE_TAG
-                docker rm $(docker ps -a -q)
-                docker rmi -f $(docker images -q)
                 cd ..
                 rm -r deploy-to-vm
                 
