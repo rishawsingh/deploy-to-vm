@@ -21,11 +21,16 @@ jobs:
                 cd deploy-to-vm
                 docker build . --file Dockerfile --tag node-docker:${{ github.sha }}
                 docker run -d -p 8000:8000 node-docker:${{ github.sha }}
+                sleep 10
                 curl --request POST \
                 --url http://localhost:8000/test \
                 --header 'content-type: application/json' \
                 --data '{"msg": "testing"}'
+                sleep 10
                 cd ..
                 rm -r deploy-to-vm
+                docker kill $(docker ps -q)
+                docker rm -f $(docker ps -a -q)
+                docker rmi -f $(docker images -q)
 
 
