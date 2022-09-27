@@ -26,7 +26,8 @@ jobs:
                 --header 'content-type: application/json' \
                 --data '{"msg": "testing"}'
                 sleep 10
-                docker rm $(docker ps -a -q)
+                docker kill $(docker ps -q)
+                docker rm -f $(docker ps -a -q)
                 docker rmi -f $(docker images -q)
                 cd ..
                 rm -r deploy-to-vm
