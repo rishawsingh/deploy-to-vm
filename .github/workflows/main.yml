@@ -9,7 +9,8 @@ jobs:
         # checkout the repo
         - name: 'Checkout GitHub Action'
           uses: actions/checkout@main
-        
+          env:
+            IMAGE_TAG: ${{ github.sha }}
         - name: ssh & clone project in VM
           uses: fifsky/ssh-action@master
           with:          
@@ -19,12 +20,16 @@ jobs:
             command: |
                 git clone https://github.com/rishawsingh/deploy-to-vm.git 
                 cd deploy-to-vm
-                docker build . --file Dockerfile --tag node-docker:$(date +%s)
-                docker run -d -p 8000:8000 node-docker:$(date +%s)
+                docker build . --file Dockerfile --tag node-docker:$IMAGE_TAG
+                docker run -d -p 8000:8000 node-docker:$IMAGE_TAG
                 curl --request POST \
                 --url http://localhost:8000/test \
                 --header 'content-type: application/json' \
                 --data '{"msg": "testing"}'
+                docker container stop node-docker:$IMAGE_TAG
+                docker container rm -f node-docker:$IMAGE_TAG
+                docker rm $(docker ps -a -q)
+                docker rmi -f $(docker images -q)
                 cd ..
                 rm -r deploy-to-vm
                 
