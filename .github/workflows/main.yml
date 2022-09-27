@@ -9,11 +9,6 @@ jobs:
         # checkout the repo
         - name: 'Checkout GitHub Action'
           uses: actions/checkout@main
-          
-        - name: 'Login via Azure CLI'
-          uses: azure/login@v1
-          with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
         
         - name: ssh & clone project in VM
           uses: fifsky/ssh-action@master
@@ -26,4 +21,8 @@ jobs:
                 cd deploy-to-vm
                 docker build . --file Dockerfile --tag node-docker:$(date +%s)
                 docker run -d -p 8000:8000 node-docker
+                curl --request POST \
+                --url http://localhost:8000/test \
+                --header 'content-type: application/json' \
+                --data '{"msg": "testing"}'
                 
