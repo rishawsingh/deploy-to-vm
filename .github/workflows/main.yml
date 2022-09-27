@@ -1,0 +1,29 @@
+name: Build And Deploy
+
+on: push
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+        # checkout the repo
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@main
+          
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+        - name: ssh & clone project in VM
+          uses: fifsky/ssh-action@master
+          with:          
+            host: ${{ secrets.HOST }}
+            user: azureuser
+            key: ${{ secrets.PRIVATE_KEY}}
+            command: |
+                git clone https://github.com/rishawsingh/deploy-to-vm.git 
+                cd deploy-to-vm
+                docker build . --file Dockerfile --tag node-docker:$(date +%s)
+                docker run -d -p 8000:8000 node-docker
+                
