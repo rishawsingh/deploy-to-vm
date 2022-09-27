@@ -25,4 +25,6 @@ jobs:
                 --url http://localhost:8000/test \
                 --header 'content-type: application/json' \
                 --data '{"msg": "testing"}'
+                cd ..
+                rm -r deploy-to-vm
                 
