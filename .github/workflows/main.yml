@@ -9,10 +9,11 @@ jobs:
         # checkout the repo
         - name: 'Checkout GitHub Action'
           uses: actions/checkout@main
-          env:
-            IMAGE_TAG: ${{ github.sha }}
+
         - name: ssh & clone project in VM
           uses: fifsky/ssh-action@master
+          env:
+            IMAGE_TAG: ${{ github.sha }}
           with:          
             host: ${{ secrets.HOST }}
             user: azureuser
