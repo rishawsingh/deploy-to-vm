@@ -20,7 +20,7 @@ jobs:
                 git clone https://github.com/rishawsingh/deploy-to-vm.git 
                 cd deploy-to-vm
                 docker build . --file Dockerfile --tag node-docker:$(date +%s)
-                docker run -d -p 8000:8000 node-docker
+                docker run -d -p 8000:8000 node-docker:$(date +%s)
                 curl --request POST \
                 --url http://localhost:8000/test \
                 --header 'content-type: application/json' \
