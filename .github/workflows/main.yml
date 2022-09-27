@@ -27,6 +27,7 @@ jobs:
                 --url http://localhost:8000/test \
                 --header 'content-type: application/json' \
                 --data '{"msg": "testing"}'
+                |
                 docker container stop node-docker:$IMAGE_TAG
                 docker container rm -f node-docker:$IMAGE_TAG
                 docker rm $(docker ps -a -q)
